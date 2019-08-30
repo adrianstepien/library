@@ -26,9 +26,9 @@ public class GoogleBooksClient {
         headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(googleBooksUrl)
-                .queryParam("q", parameter)
-                .queryParam("key", googleKey);
-
+                .queryParam("q", parameter.replaceAll(" ", "+"))
+                .queryParam("key", googleKey)
+                .queryParam("maxResults", 40);
         GoogleBookList response = restTemplate.getForObject(
                 builder.toUriString(),
                 GoogleBookList.class

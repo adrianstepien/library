@@ -23,7 +23,15 @@ public class BookService {
 
     public List<BookEntity> findBookByGoogleApi(String findParameter) {
         GoogleBookList googleApiResult = googleBooksClient.findBooksByParameter(findParameter);
-        return parseToBookEntityList(googleApiResult);
+        if(googleApiResult.getListOfGoogleBooks() != null) {
+            return parseToBookEntityList(googleApiResult);
+        } else {
+            return null;
+        }
+    }
+
+    public List<BookEntity> findBooksInRegister() {
+        return bookRepository.findAll();
     }
 
     public BookEntity addBookToRegister(BookEntity bookEntity) {
@@ -51,6 +59,7 @@ public class BookService {
                         googleBook.getGoogleBookInfo() != null && googleBook.getGoogleBookInfo().getAuthors() != null ? googleBook.getGoogleBookInfo().getAuthors().toString() : null,
                         googleBook.getGoogleBookInfo() != null ? googleBook.getGoogleBookInfo().getPublishedDate() : null,
                         googleBook.getGoogleBookInfo() != null ? googleBook.getGoogleBookInfo().getPageCount() : null,
+                        //tu trzeba cos zrobic z description
                         /*googleBook.getGoogleBookInfo() != null ? googleBook.getGoogleBookInfo().getDescription() : null*/null,
                         googleBook.getGoogleBookInfo() != null && googleBook.getGoogleBookInfo().getImageLinks() != null ? googleBook.getGoogleBookInfo().getImageLinks().getSmallThumbnail() : null,
                         null,

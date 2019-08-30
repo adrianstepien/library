@@ -18,9 +18,14 @@ public class BookController {
         this.bookService = bookService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<BookEntity>> findBooksByParameter(@RequestHeader(value = "findParam") String findParam) {
-        return ResponseEntity.ok(bookService.findBookByGoogleApi(findParam));
+    @GetMapping(path = "/findByParam/{phrase}")
+    public ResponseEntity<List<BookEntity>> findBooksByParameter(@PathVariable(value = "phrase") String phrase) {
+        return ResponseEntity.ok(bookService.findBookByGoogleApi(phrase));
+    }
+
+    @GetMapping()
+    public ResponseEntity<List<BookEntity>> findBooksInRegister() {
+        return ResponseEntity.ok(bookService.findBooksInRegister());
     }
 
     @PostMapping
@@ -33,8 +38,8 @@ public class BookController {
         return ResponseEntity.ok(bookService.updateBookInRegister(bookEntity));
     }
 
-    @DeleteMapping
-    public ResponseEntity deleteBookFromRegister(@RequestParam Long bookId) {
+    @DeleteMapping("/{bookId}")
+    public ResponseEntity deleteBookFromRegister(@PathVariable("bookId") Long bookId) {
         bookService.deleteBookFromRegister(bookId);
         return ResponseEntity.ok().build();
     }
