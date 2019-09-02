@@ -1,0 +1,14 @@
+google:
+  books:
+    url: ${GOOGLE_URL}
+    key: ${GOOGLE_KEY}
+
+spring:
+  datasource:
+    url: ${DATABASE_URL}
+
+  jpa:
+    properties:
+      hibernate:
+        temp:
+          use_jdbc_metadata_defaults: ${JDBC_CLOB:false}
