@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "${cors.address}")
 @RequestMapping(path = "/api/book")
 public class BookController {
     private final BookService bookService;
@@ -23,7 +24,7 @@ public class BookController {
         return ResponseEntity.ok(bookService.findBookByGoogleApi(phrase));
     }
 
-    @GetMapping()
+    @GetMapping
     public ResponseEntity<List<BookEntity>> findBooksInRegister() {
         return ResponseEntity.ok(bookService.findBooksInRegister());
     }

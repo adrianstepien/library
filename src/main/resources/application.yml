@@ -12,3 +12,6 @@ spring:
       hibernate:
         temp:
           use_jdbc_metadata_defaults: ${JDBC_CLOB:false}
+
+cors:
+  address: ${CORS_URL}
