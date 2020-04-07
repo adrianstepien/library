@@ -22,17 +22,14 @@ public class GoogleBooksClient {
     public GoogleBookList findBooksByParameter(String parameter) {
         RestTemplate restTemplate = new RestTemplate();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("Accept", MediaType.APPLICATION_JSON_VALUE);
-
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(googleBooksUrl)
                 .queryParam("q", parameter.replaceAll(" ", "+"))
                 .queryParam("key", googleKey)
                 .queryParam("maxResults", 40);
-        GoogleBookList response = restTemplate.getForObject(
+
+        return restTemplate.getForObject(
                 builder.toUriString(),
                 GoogleBookList.class
         );
-        return response;
     }
 }

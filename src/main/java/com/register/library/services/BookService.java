@@ -60,7 +60,7 @@ public class BookService {
                         googleBook.getGoogleBookInfo() != null ? googleBook.getGoogleBookInfo().getPublishedDate() : null,
                         googleBook.getGoogleBookInfo() != null ? googleBook.getGoogleBookInfo().getPageCount() : null,
                         //tu trzeba cos zrobic z description
-                        /*googleBook.getGoogleBookInfo() != null ? googleBook.getGoogleBookInfo().getDescription() : null*/null,
+                        googleBook.getGoogleBookInfo() != null ? googleBook.getGoogleBookInfo().getDescription() : null,
                         googleBook.getGoogleBookInfo() != null && googleBook.getGoogleBookInfo().getImageLinks() != null ? googleBook.getGoogleBookInfo().getImageLinks().getSmallThumbnail() : null,
                         null,
                         null,
