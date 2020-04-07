@@ -1,5 +1,6 @@
 package com.register.library.services;
 
+import com.register.library.administrationClient.AdminBooksClient;
 import com.register.library.googleBooks.GoogleBooksClient;
 import com.register.library.googleBooks.entity.GoogleBookList;
 import com.register.library.repository.model.entity.BookEntity;
@@ -14,11 +15,13 @@ import java.util.List;
 public class BookService {
     private GoogleBooksClient googleBooksClient;
     private BookRepository bookRepository;
+    private AdminBooksClient adminBooksClient;
 
     @Autowired
-    public BookService(GoogleBooksClient googleBooksClient, BookRepository bookRepository) {
+    public BookService(GoogleBooksClient googleBooksClient, BookRepository bookRepository, AdminBooksClient adminBooksClient) {
         this.googleBooksClient = googleBooksClient;
         this.bookRepository = bookRepository;
+        this.adminBooksClient = adminBooksClient;
     }
 
     public List<BookEntity> findBookByGoogleApi(String findParameter) {
@@ -28,6 +31,11 @@ public class BookService {
         } else {
             return null;
         }
+    }
+
+    public List<BookEntity> findBooksInAdministrationBooksPanel() {
+        adminBooksClient.getBooks();
+        return null;
     }
 
     public List<BookEntity> findBooksInRegister() {

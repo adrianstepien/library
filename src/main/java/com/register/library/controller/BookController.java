@@ -24,6 +24,11 @@ public class BookController {
         return ResponseEntity.ok(bookService.findBookByGoogleApi(phrase));
     }
 
+    @GetMapping(path = "/check")
+    public ResponseEntity<List<BookEntity>> tmp() {
+        return ResponseEntity.ok(bookService.findBooksInAdministrationBooksPanel());
+    }
+
     @GetMapping
     public ResponseEntity<List<BookEntity>> findBooksInRegister() {
         return ResponseEntity.ok(bookService.findBooksInRegister());
