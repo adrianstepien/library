@@ -17,6 +17,7 @@ import com.google.api.services.drive.model.File;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
@@ -33,6 +34,8 @@ public class GoogleDriveClient {
     private static final List<String> SCOPES = Collections.singletonList(DriveScopes.DRIVE);
     private static final String USER_IDENTIFIER_KEY = "DUMMY_USER";
     private final String callbackUri;
+    //path to save multipart files
+    private final String multipartTempPath;
     //load file as resource
     private final Resource credentialsFilePath;
     private final Resource keyStoreFolder;
@@ -40,10 +43,12 @@ public class GoogleDriveClient {
 
     public GoogleDriveClient(@Value("${google.oauth.callback.uri}") String callbackUri,
                              @Value("${google.secret.key.path}") Resource credentialsFilePath,
-                             @Value("${google.credentials.folder.path}") Resource keyStoreFolder) {
+                             @Value("${google.credentials.folder.path}") Resource keyStoreFolder,
+                             @Value("${spring.servlet.multipart.location}") String multipartTempPath) {
         this.callbackUri = callbackUri;
         this.credentialsFilePath = credentialsFilePath;
         this.keyStoreFolder = keyStoreFolder;
+        this.multipartTempPath = multipartTempPath;
     }
 
     /**
@@ -81,12 +86,15 @@ public class GoogleDriveClient {
         return false;
     }
 
-    public void saveFile() throws IOException {
+    public void saveFile(String fileId, MultipartFile bookToSave) throws IOException {
         Drive drive = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, codeFlow.loadCredential(USER_IDENTIFIER_KEY)).setApplicationName("Quickstart").build();
         File file = new File();
-        file.setId("sample.jpg");
+        file.setName(fileId + ".mobi");
 
-        FileContent content = new FileContent("image/jpeg", new java.io.File("C:\\tmp\\tempKeystoreToMyLibrary\\nowy3.jpeg"));
-        drive.files().insert(file, content).setFields("id").execute();
+        java.io.File fileToUpload = new java.io.File(multipartTempPath + bookToSave.getOriginalFilename());
+        bookToSave.transferTo(fileToUpload);
+
+        FileContent content = new FileContent("application/x-mobipocket-ebook", fileToUpload);
+        drive.files().create(file, content).setFields("id").execute();
     }
 }
