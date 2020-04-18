@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Collections;
@@ -86,7 +87,7 @@ public class GoogleDriveClient {
         return false;
     }
 
-    public void saveFile(String fileId, MultipartFile bookToSave) throws IOException {
+    public String saveFile(Long fileId, MultipartFile bookToSave) throws IOException {
         Drive drive = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, codeFlow.loadCredential(USER_IDENTIFIER_KEY)).setApplicationName("Quickstart").build();
         File file = new File();
         file.setName(fileId + ".mobi");
@@ -95,6 +96,14 @@ public class GoogleDriveClient {
         bookToSave.transferTo(fileToUpload);
 
         FileContent content = new FileContent("application/x-mobipocket-ebook", fileToUpload);
-        drive.files().create(file, content).setFields("id").execute();
+        File savedFile = drive.files().create(file, content).setFields("id").execute();
+        return savedFile.getId();
+    }
+
+    public byte[] getFile(String fileId) throws IOException {
+        Drive drive = new Drive.Builder(HTTP_TRANSPORT, JSON_FACTORY, codeFlow.loadCredential(USER_IDENTIFIER_KEY)).setApplicationName("Quickstart").build();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        drive.files().get(fileId).executeMediaAndDownloadTo(outputStream);
+        return outputStream.toByteArray();
     }
 }

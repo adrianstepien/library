@@ -30,6 +30,6 @@ public class BookEntity {
     private String ownReview;
     @Column(name = "own_rating")
     private Integer ownRating;
-    @Column(name = "path_to_file")
-    private String pathToFile;
+    @Column(name = "file_id")
+    private String fileId;
 }
