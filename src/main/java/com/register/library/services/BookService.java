@@ -34,6 +34,18 @@ public class BookService {
         return bookRepository.findAll();
     }
 
+    /**
+     * check if book has a file
+     */
+    public boolean hasFile(Long bookId) {
+        if (bookRepository.existsById(bookId)) {
+            BookEntity bookEntity = bookRepository.getOne(bookId);
+            return bookEntity.getFileId() != null;
+        } else {
+            return false;
+        }
+    }
+
     public BookEntity addBookToRegister(BookEntity bookEntity) {
         return bookRepository.save(bookEntity);
     }

@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Controller
+@CrossOrigin(origins = "${cors.address}")
 public class GoogleDriveController {
 
     private GoogleDriveService googleDriveService;
@@ -30,9 +31,9 @@ public class GoogleDriveController {
         googleDriveService.saveFile(response, bookId, bookToSave);
     }
 
-    @GetMapping(value = "getFile")
-    public @ResponseBody byte[] getFile(HttpServletResponse response, @RequestParam("bookId") Long bookId) throws IOException {
-        return googleDriveService.getFile(response, bookId);
+    @GetMapping(value = "getFile/{bookId}")
+    public @ResponseBody byte[] getFile(HttpServletResponse response, @PathVariable("bookId") String bookId) throws IOException {
+        return googleDriveService.getFile(response, Long.parseLong(bookId));
     }
 
     @GetMapping(value = "oauth2/callback")

@@ -37,7 +37,6 @@ public class GoogleDriveService {
         if (isAuthorized()) {
             if (bookRepository.existsById(bookId)) {
                 BookEntity bookEntity = bookRepository.getOne(bookId);
-                googleDriveClient.getFile(bookEntity.getFileId());//TODO tmp
                 if  (bookEntity.getFileId() != null) {
                     return googleDriveClient.getFile(bookEntity.getFileId());
                 } else {

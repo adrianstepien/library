@@ -29,6 +29,11 @@ public class BookController {
         return ResponseEntity.ok(bookService.findBooksInRegister());
     }
 
+    @GetMapping(value = "/hasFile/{bookId}")
+    public ResponseEntity<Boolean> hasBookFile(@PathVariable("bookId") Long bookId) {
+        return ResponseEntity.ok(bookService.hasFile(bookId));
+    }
+
     @PostMapping
     public ResponseEntity<BookEntity> addBookToRegister(@RequestBody BookEntity bookEntity) {
         return ResponseEntity.ok(bookService.addBookToRegister(bookEntity));
