@@ -2,10 +2,24 @@ google:
   books:
     url: ${GOOGLE_URL}
     key: ${GOOGLE_KEY}
+  secret:
+    key:
+      path: ${SECRET_KEY_PATH}
+  oauth:
+    callback:
+      uri: ${CALLBACK_OAUTH_URI}
+  credentials:
+    folder:
+      path: ${CREDENTIAL_PATH}
 
 spring:
   datasource:
     url: ${DATABASE_URL}
+  servlet:
+    multipart:
+      location: ${TEMP_FILE_LOCATION}
+      max-file-size: ${MAX_FILE_SIZE}
+      max-request-size: ${MAX_REQUEST_SIZE}
 
   jpa:
     properties:
