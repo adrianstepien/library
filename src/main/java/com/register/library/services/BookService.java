@@ -34,6 +34,10 @@ public class BookService {
         return bookRepository.findAll();
     }
 
+    public BookEntity findBookInRegisterById(Long id) {
+        return bookRepository.findById(id).orElse(null);
+    }
+
     /**
      * check if book has a file
      */

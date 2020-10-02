@@ -29,6 +29,11 @@ public class BookController {
         return ResponseEntity.ok(bookService.findBooksInRegister());
     }
 
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<BookEntity> findBookInRegisterById(@PathVariable(value = "id") Long id) {
+        return ResponseEntity.ok(bookService.findBookInRegisterById(id));
+    }
+
     @GetMapping(value = "/hasFile/{bookId}")
     public ResponseEntity<Boolean> hasBookFile(@PathVariable("bookId") Long bookId) {
         return ResponseEntity.ok(bookService.hasFile(bookId));
