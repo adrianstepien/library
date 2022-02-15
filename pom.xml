@@ -71,6 +71,18 @@
 			<artifactId>google-api-services-drive</artifactId>
 			<version>v3-rev130-1.25.0</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct</artifactId>
+			<version>1.4.2.Final</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct-processor</artifactId>
+			<version>1.4.2.Final</version>
+		</dependency>
 	</dependencies>
 
 	<build>

@@ -1,28 +1,39 @@
 package com.register.library.services;
 
 import com.register.library.googleBooks.GoogleBooksClient;
+import com.register.library.googleBooks.entity.GoogleBook;
 import com.register.library.googleBooks.entity.GoogleBookList;
+import com.register.library.mapper.BookMapper;
 import com.register.library.repository.model.entity.BookEntity;
 import com.register.library.repository.model.repository.BookRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
+/**
+ * Service for book operations
+ */
 @Service
+@RequiredArgsConstructor
 public class BookService {
-    private GoogleBooksClient googleBooksClient;
-    private BookRepository bookRepository;
 
-    @Autowired
-    public BookService(GoogleBooksClient googleBooksClient, BookRepository bookRepository) {
-        this.googleBooksClient = googleBooksClient;
-        this.bookRepository = bookRepository;
-    }
+    private final GoogleBooksClient googleBooksClient;
+    private final BookRepository bookRepository;
+    private final BookMapper bookMapper;
 
-    public List<BookEntity> findBookByGoogleApi(String findParameter) {
-        GoogleBookList googleApiResult = googleBooksClient.findBooksByParameter(findParameter);
+    /**
+     * Find books in google book API by declared parameter and mapped to transport model
+     *
+     * @param inputParameter parameter to search defined by user
+     * @return list of books found in google book API
+     */
+    public List<BookEntity> findBookByGoogleApi(String inputParameter) {
+        GoogleBookList googleApiResult = googleBooksClient.findBooksByParameter(inputParameter);
         if(googleApiResult.getListOfGoogleBooks() != null) {
             return parseToBookEntityList(googleApiResult);
         } else {
@@ -30,59 +41,81 @@ public class BookService {
         }
     }
 
+    /**
+     * Find all books saved by user
+     *
+     * @return list of user' books
+     */
     public List<BookEntity> findBooksInRegister() {
         return bookRepository.findAll();
     }
 
+    /**
+     * Find book saved by user
+     *
+     * @param id id of book
+     * @return book saved by user
+     */
     public BookEntity findBookInRegisterById(Long id) {
-        return bookRepository.findById(id).orElse(null);
+        return bookRepository.findById(id)
+                .orElse(null);
     }
 
     /**
-     * check if book has a file
+     * Check if book has a file saved on google drive
+     *
+     * @param bookId id of book
+     * @return information if book has a file
      */
     public boolean hasFile(Long bookId) {
-        if (bookRepository.existsById(bookId)) {
-            BookEntity bookEntity = bookRepository.getOne(bookId);
-            return bookEntity.getFileId() != null;
-        } else {
-            return false;
-        }
+        return bookRepository.findById(bookId)
+                .map(bookEntity -> bookEntity.getFileId() != null)
+                .orElse(false);
     }
 
+    /**
+     * Save book on database
+     *
+     * @param bookEntity entity defined by user
+     * @return saved book
+     */
     public BookEntity addBookToRegister(BookEntity bookEntity) {
         return bookRepository.save(bookEntity);
     }
 
+    /**
+     * Edit book on database
+     *
+     * @param bookEntity entity defined by user
+     * @return edited book
+     */
     public BookEntity updateBookInRegister(BookEntity bookEntity) {
-        return bookRepository.save(bookEntity);
+        Optional<BookEntity> bookEntityOptional = bookRepository.findById(bookEntity.getId());
+        if (bookEntityOptional.isPresent()) {
+            return bookRepository.save(bookEntity);
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No book found");
+        }
     }
 
+    /**
+     * Delete book from database
+     *
+     * @param bookId id of book
+     */
     public void deleteBookFromRegister(Long bookId) {
-        bookRepository.deleteById(bookId);
-    }
-
-    public void createNewBookInLibrary(BookEntity newBookEntity) {
-        //skorzystac z metody wysylajacej stworzenie ksiazki w biblioteczce
+        Optional<BookEntity> bookEntityOptional = bookRepository.findById(bookId);
+        if (bookEntityOptional.isPresent()) {
+            bookRepository.deleteById(bookId);
+        } else {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No book found");
+        }
     }
 
     private List<BookEntity> parseToBookEntityList(GoogleBookList googleApiResult) {
-        List<BookEntity> listOfBookEntity = new ArrayList<>();
-        googleApiResult.getListOfGoogleBooks().forEach(
-                googleBook -> listOfBookEntity.add(new BookEntity(
-                        null,
-                        googleBook.getGoogleBookInfo() != null ? googleBook.getGoogleBookInfo().getTitle() : null,
-                        googleBook.getGoogleBookInfo() != null && googleBook.getGoogleBookInfo().getAuthors() != null ? googleBook.getGoogleBookInfo().getAuthors().toString() : null,
-                        googleBook.getGoogleBookInfo() != null ? googleBook.getGoogleBookInfo().getPublishedDate() : null,
-                        googleBook.getGoogleBookInfo() != null ? googleBook.getGoogleBookInfo().getPageCount() : null,
-                        //tu trzeba cos zrobic z description
-                        googleBook.getGoogleBookInfo() != null ? googleBook.getGoogleBookInfo().getDescription() : null,
-                        googleBook.getGoogleBookInfo() != null && googleBook.getGoogleBookInfo().getImageLinks() != null ? googleBook.getGoogleBookInfo().getImageLinks().getSmallThumbnail() : null,
-                        null,
-                        null,
-                        null
-                ))
-        );
-        return listOfBookEntity;
+        return googleApiResult.getListOfGoogleBooks().stream()
+                        .map(GoogleBook::getGoogleBookInfo)
+                        .map(bookMapper::convertGoogleBookInfoToBookEntity)
+                                .collect(Collectors.toList());
     }
 }
