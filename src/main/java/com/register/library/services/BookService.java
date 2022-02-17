@@ -34,7 +34,7 @@ public class BookService {
      */
     public List<BookEntity> findBookByGoogleApi(String inputParameter) {
         GoogleBookList googleApiResult = googleBooksClient.findBooksByParameter(inputParameter);
-        if(googleApiResult.getListOfGoogleBooks() != null) {
+        if (googleApiResult.getListOfGoogleBooks() != null) {
             return parseToBookEntityList(googleApiResult);
         } else {
             return null;
@@ -91,11 +91,10 @@ public class BookService {
      */
     public BookEntity updateBookInRegister(BookEntity bookEntity) {
         Optional<BookEntity> bookEntityOptional = bookRepository.findById(bookEntity.getId());
-        if (bookEntityOptional.isPresent()) {
-            return bookRepository.save(bookEntity);
-        } else {
+        if (!bookEntityOptional.isPresent()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No book found");
         }
+        return bookRepository.save(bookEntity);
     }
 
     /**
@@ -105,17 +104,16 @@ public class BookService {
      */
     public void deleteBookFromRegister(Long bookId) {
         Optional<BookEntity> bookEntityOptional = bookRepository.findById(bookId);
-        if (bookEntityOptional.isPresent()) {
-            bookRepository.deleteById(bookId);
-        } else {
+        if (!bookEntityOptional.isPresent()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No book found");
         }
+        bookRepository.deleteById(bookId);
     }
 
     private List<BookEntity> parseToBookEntityList(GoogleBookList googleApiResult) {
         return googleApiResult.getListOfGoogleBooks().stream()
                         .map(GoogleBook::getGoogleBookInfo)
                         .map(bookMapper::convertGoogleBookInfoToBookEntity)
-                                .collect(Collectors.toList());
+                        .collect(Collectors.toList());
     }
 }

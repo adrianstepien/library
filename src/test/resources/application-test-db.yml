@@ -1,0 +1,14 @@
+spring:
+  liquibase:
+    enabled: true
+  datasource:
+    url: jdbc:tc:postgresql://localhost/librarydb
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+    username: postgres
+    password: root
+
+  jpa:
+    properties:
+      hibernate:
+        temp:
+          use_jdbc_metadata_defaults: false

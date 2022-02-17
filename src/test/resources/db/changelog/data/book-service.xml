@@ -1,0 +1,45 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+    <include file="../db.changelog-master.xml" relativeToChangelogFile="true"/>
+
+    <changeSet id="clean-data" author="adrian">
+        <delete tableName="book"/>
+    </changeSet>
+
+    <changeSet id="test-data" author="adrian">
+        <insert tableName="book">
+            <column name="id" value="1"/>
+            <column name="authors" value="J.R.R. Tolkien"/>
+            <column name="description" type="varchar(255)" value="The lord of the rings"/>
+            <column name="own_rating" value="3"/>
+            <column name="own_review" type="varchar(255)" value="Good book"/>
+            <column name="page_count" value="123"/>
+            <column name="title" type="varchar(255)" value="The lord of the rings"/>
+        </insert>
+        <insert tableName="book">
+            <column name="id" value="2"/>
+            <column name="authors" value="Harlan Coben"/>
+            <column name="description" type="varchar(255)" value="Book to update"/>
+            <column name="own_rating" value="4"/>
+            <column name="own_review" type="varchar(255)" value="Nice"/>
+            <column name="page_count" value="423"/>
+            <column name="title" type="varchar(255)" value="The Boy from the Woods"/>
+            <column name="file_id" type="varchar(255)" value="sdfiun34mdas32nj"/>
+        </insert>
+        <insert tableName="book">
+            <column name="id" value="3"/>
+            <column name="authors" value="Harlan Coben"/>
+            <column name="description" type="varchar(255)" value="Book to delete"/>
+            <column name="own_rating" value="4"/>
+            <column name="own_review" type="varchar(255)" value="Nice"/>
+            <column name="page_count" value="423"/>
+            <column name="title" type="varchar(255)" value="The Boy from the Woods"/>
+            <column name="file_id" type="varchar(255)" value="sdfiun34mdas32nj"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

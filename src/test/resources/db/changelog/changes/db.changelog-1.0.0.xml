@@ -1,0 +1,38 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.3.xsd">
+
+    <changeSet id="create-book-id-seq" author="adrian">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="book_id_seq"/>
+            </not>
+        </preConditions>
+        <createSequence sequenceName="book_id_seq" minValue="100"/>
+    </changeSet>
+
+    <changeSet id="create-book-table" author="adrian">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="book"/>
+            </not>
+        </preConditions>
+        <createTable tableName="book">
+            <column name="id" type="bigint" defaultValueSequenceNext="book_id_seq">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="authors" type="varchar(255)"/>
+            <column name="description" type="text"/>
+            <column name="image_link" type="varchar(255)"/>
+            <column name="own_rating" type="integer"/>
+            <column name="own_review" type="varchar(255)"/>
+            <column name="page_count" type="varchar(255)"/>
+            <column name="path_to_file" type="varchar(255)"/>
+            <column name="published_date" type="varchar(255)"/>
+            <column name="title" type="varchar(255))"/>
+            <column name="file_id" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
