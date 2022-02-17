@@ -3,6 +3,7 @@ package com.register.library.controller;
 import com.register.library.repository.model.entity.BookEntity;
 import com.register.library.services.BookService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,6 +16,7 @@ import java.util.List;
 @CrossOrigin(origins = "${cors.address}")
 @RequestMapping(path = "/api/book")
 @RequiredArgsConstructor
+@Slf4j
 public class BookController {
 
     private final BookService bookService;
@@ -27,6 +29,7 @@ public class BookController {
      */
     @GetMapping(path = "/findByParam/{phrase}")
     public ResponseEntity<List<BookEntity>> findBooksByParameter(@PathVariable(value = "phrase") String phrase) {
+        log.info("BookController findBooksByParameter with phrase {}", phrase);
         return ResponseEntity.ok(bookService.findBookByGoogleApi(phrase));
     }
 
@@ -37,6 +40,7 @@ public class BookController {
      */
     @GetMapping
     public ResponseEntity<List<BookEntity>> findBooksInRegister() {
+        log.info("BookController findBooksInRegister");
         return ResponseEntity.ok(bookService.findBooksInRegister());
     }
 
@@ -48,6 +52,7 @@ public class BookController {
      */
     @GetMapping(path = "/{id}")
     public ResponseEntity<BookEntity> findBookInRegisterById(@PathVariable(value = "id") Long id) {
+        log.info("BookController findBookInRegisterById with id {}", id);
         return ResponseEntity.ok(bookService.findBookInRegisterById(id));
     }
 
@@ -59,6 +64,7 @@ public class BookController {
      */
     @GetMapping(value = "/hasFile/{bookId}")
     public ResponseEntity<Boolean> hasBookFile(@PathVariable("bookId") Long bookId) {
+        log.info("BookController hasBookFile with id {}", bookId);
         return ResponseEntity.ok(bookService.hasFile(bookId));
     }
 
@@ -70,6 +76,7 @@ public class BookController {
      */
     @PostMapping
     public ResponseEntity<BookEntity> addBookToRegister(@RequestBody BookEntity bookEntity) {
+        log.info("BookController addBookToRegister with bookEntity {}", bookEntity.toString());
         return ResponseEntity.ok(bookService.addBookToRegister(bookEntity));
     }
 
@@ -81,6 +88,7 @@ public class BookController {
      */
     @PutMapping
     public ResponseEntity<BookEntity> updateBookInRegister(@RequestBody BookEntity bookEntity) {
+        log.info("BookController updateBookInRegister with bookEntity {}", bookEntity.toString());
         return ResponseEntity.ok(bookService.updateBookInRegister(bookEntity));
     }
 
@@ -90,7 +98,9 @@ public class BookController {
      * @param bookId id of book
      */
     @DeleteMapping("/{bookId}")
-    public void deleteBookFromRegister(@PathVariable("bookId") Long bookId) {
+    public ResponseEntity<Void> deleteBookFromRegister(@PathVariable("bookId") Long bookId) {
+        log.info("BookController deleteBookFromRegister with bookId {}", bookId);
         bookService.deleteBookFromRegister(bookId);
+        return ResponseEntity.ok().build();
     }
 }

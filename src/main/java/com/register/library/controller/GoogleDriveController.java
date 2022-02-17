@@ -2,10 +2,12 @@ package com.register.library.controller;
 
 import com.register.library.services.GoogleDriveService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +21,8 @@ import java.io.IOException;
 @RestController
 @CrossOrigin(origins = "${cors.address}")
 @RequiredArgsConstructor
+@Slf4j
+@RequestMapping(path = "/api/google/drive")
 public class GoogleDriveController {
 
 	private final GoogleDriveService googleDriveService;
@@ -32,6 +36,7 @@ public class GoogleDriveController {
 	 */
 	@GetMapping(value = "/getFile/{bookId}")
 	public byte[] getFile(HttpServletResponse response, @PathVariable("bookId") String bookId) throws IOException {
+		log.info("GoogleDriveController getFile with bookId {}", bookId);
 		return googleDriveService.getFile(response, Long.parseLong(bookId));
 	}
 
@@ -45,6 +50,7 @@ public class GoogleDriveController {
 	 */
 	@PostMapping(value = "/saveFile/{bookId}")
 	public void saveFile(HttpServletResponse response, @PathVariable("bookId") Long bookId, @RequestParam("bookFile") MultipartFile bookToSave) throws IOException {
+		log.info("GoogleDriveController saveFile with bookId {}", bookId);
 		googleDriveService.saveFile(response, bookId, bookToSave);
 	}
 }

@@ -26,6 +26,9 @@ import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Google drive REST client
+ */
 @Service
 public class GoogleDriveClient {
 
