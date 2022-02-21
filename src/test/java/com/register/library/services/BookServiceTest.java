@@ -122,6 +122,25 @@ class BookServiceTest {
 		Page<BookEntity> outputList = bookService.findBooksInRegister(searchCriteriaDto);
 
 		// then
+		Assertions.assertEquals(1, outputList.getSize());
+		BookEntity output = outputList.getContent().get(0);
+		Assertions.assertEquals("J.R.R. Tolkien", output.getAuthors());
+		Assertions.assertEquals("The lord of the rings", output.getTitle());
+		Assertions.assertEquals(9, (int) output.getOwnRating());
+		Assertions.assertEquals("Good book", output.getOwnReview());
+		Assertions.assertEquals("123", output.getPageCount());
+		Assertions.assertEquals("The lord of the rings", output.getTitle());
+	}
+
+	@Test
+	public void findAllBooksInRegisterWithTileLikeTest() {
+		// given
+		SearchCriteriaDto searchCriteriaDto = new SearchCriteriaDto(0, 10, Sort.Direction.DESC, SearchCriteriaDto.SortField.OWN_RATING);
+
+		// when
+		Page<BookEntity> outputList = bookService.findBooksInRegisterWithTitleLike(searchCriteriaDto, "lord of the ");
+
+		// then
 		Assertions.assertEquals(1, outputList.getTotalElements());
 		BookEntity output = outputList.getContent().get(0);
 		Assertions.assertEquals("J.R.R. Tolkien", output.getAuthors());

@@ -29,7 +29,7 @@ public class BookController {
      * @param phrase parameter to search defined by user
      * @return list of books found in google book API
      */
-    @GetMapping(path = "/findByParam/{phrase}")
+    @GetMapping(path = "/google/findByParam/{phrase}")
     public ResponseEntity<List<BookEntity>> findBooksByParameter(@PathVariable(value = "phrase") String phrase) {
         log.info("BookController findBooksByParameter with phrase {}", phrase);
         return ResponseEntity.ok(bookService.findBookByGoogleApi(phrase));
@@ -45,6 +45,19 @@ public class BookController {
     public ResponseEntity<Page<BookEntity>> findBooksInRegister(SearchCriteriaDto searchCriteriaDto) {
         log.info("BookController findBooksInRegister with search criteria {}", searchCriteriaDto);
         return ResponseEntity.ok(bookService.findBooksInRegister(searchCriteriaDto));
+    }
+
+    /**
+     * Find all books saved by user with title like phrase
+     *
+     * @param searchCriteriaDto criteria to search defined by user
+     * @param phrase parameter to search defined by user
+     * @return page of user' books
+     */
+    @GetMapping(path = "/byTitle/{phrase}")
+    public ResponseEntity<Page<BookEntity>> findBooksInRegisterWithTitleLike(SearchCriteriaDto searchCriteriaDto, @PathVariable(value = "phrase") String phrase) {
+        log.info("BookController findBooksInRegisterWithParameter with search criteria {} and phrase {}", searchCriteriaDto, phrase);
+        return ResponseEntity.ok(bookService.findBooksInRegisterWithTitleLike(searchCriteriaDto, phrase));
     }
 
     /**

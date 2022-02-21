@@ -54,6 +54,17 @@ public class BookService {
     }
 
     /**
+     * Find all books saved by user with title like phrase
+     *
+     * @param searchCriteriaDto criteria to search defined by user
+     * @param phrase parameter to search defined by user
+     * @return page of user' books
+     */
+    public Page<BookEntity> findBooksInRegisterWithTitleLike(SearchCriteriaDto searchCriteriaDto, String phrase) {
+        return bookRepository.findBooksWithTitleLike(searchCriteriaDto, phrase);
+    }
+
+    /**
      * Find book saved by user
      *
      * @param id id of book
