@@ -16,7 +16,7 @@
             <column name="id" value="1"/>
             <column name="authors" value="J.R.R. Tolkien"/>
             <column name="description" type="varchar(255)" value="The lord of the rings"/>
-            <column name="own_rating" value="3"/>
+            <column name="own_rating" value="9"/>
             <column name="own_review" type="varchar(255)" value="Good book"/>
             <column name="page_count" value="123"/>
             <column name="title" type="varchar(255)" value="The lord of the rings"/>

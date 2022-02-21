@@ -1,9 +1,11 @@
 package com.register.library.controller;
 
+import com.register.library.dto.SearchCriteriaDto;
 import com.register.library.repository.model.entity.BookEntity;
 import com.register.library.services.BookService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,12 +38,13 @@ public class BookController {
     /**
      * Find all books saved by user
      *
-     * @return list of user' books
+     * @param searchCriteriaDto criteria to search defined by user
+     * @return page of user' books
      */
     @GetMapping
-    public ResponseEntity<List<BookEntity>> findBooksInRegister() {
-        log.info("BookController findBooksInRegister");
-        return ResponseEntity.ok(bookService.findBooksInRegister());
+    public ResponseEntity<Page<BookEntity>> findBooksInRegister(SearchCriteriaDto searchCriteriaDto) {
+        log.info("BookController findBooksInRegister with search criteria {}", searchCriteriaDto);
+        return ResponseEntity.ok(bookService.findBooksInRegister(searchCriteriaDto));
     }
 
     /**

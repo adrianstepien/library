@@ -1,6 +1,7 @@
 package com.register.library.services;
 
 import com.register.library.config.LiquibaseTestContext;
+import com.register.library.dto.SearchCriteriaDto;
 import com.register.library.googleBooks.GoogleBooksClient;
 import com.register.library.googleBooks.entity.GoogleBookList;
 import com.register.library.helper.BookEntityHelper;
@@ -14,6 +15,8 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
@@ -100,11 +103,33 @@ class BookServiceTest {
 
 	@Test
 	public void findAllBooksInRegisterTest() {
+		// given
+		SearchCriteriaDto searchCriteriaDto = new SearchCriteriaDto(0, 100, Sort.Direction.DESC, SearchCriteriaDto.SortField.OWN_RATING);
+
 		// given and when
-		List<BookEntity> output = bookService.findBooksInRegister();
+		Page<BookEntity> output = bookService.findBooksInRegister(searchCriteriaDto);
 
 		// then
-		Assertions.assertTrue(output.size() > 0);
+		Assertions.assertTrue(output.getTotalElements() > 0);
+	}
+
+	@Test
+	public void findFirstBookWithSearchCriteriaByFindAllBooksInRegisterTest() {
+		// given
+		SearchCriteriaDto searchCriteriaDto = new SearchCriteriaDto(0, 1, Sort.Direction.DESC, SearchCriteriaDto.SortField.OWN_RATING);
+
+		// when
+		Page<BookEntity> outputList = bookService.findBooksInRegister(searchCriteriaDto);
+
+		// then
+		Assertions.assertEquals(1, outputList.getTotalElements());
+		BookEntity output = outputList.getContent().get(0);
+		Assertions.assertEquals("J.R.R. Tolkien", output.getAuthors());
+		Assertions.assertEquals("The lord of the rings", output.getTitle());
+		Assertions.assertEquals(9, (int) output.getOwnRating());
+		Assertions.assertEquals("Good book", output.getOwnReview());
+		Assertions.assertEquals("123", output.getPageCount());
+		Assertions.assertEquals("The lord of the rings", output.getTitle());
 	}
 
 	@Test
@@ -115,7 +140,7 @@ class BookServiceTest {
 		// then
 		Assertions.assertEquals("J.R.R. Tolkien", output.getAuthors());
 		Assertions.assertEquals("The lord of the rings", output.getTitle());
-		Assertions.assertEquals(3, (int) output.getOwnRating());
+		Assertions.assertEquals(9, (int) output.getOwnRating());
 		Assertions.assertEquals("Good book", output.getOwnReview());
 		Assertions.assertEquals("123", output.getPageCount());
 		Assertions.assertEquals("The lord of the rings", output.getTitle());

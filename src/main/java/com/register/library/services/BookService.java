@@ -1,5 +1,6 @@
 package com.register.library.services;
 
+import com.register.library.dto.SearchCriteriaDto;
 import com.register.library.googleBooks.GoogleBooksClient;
 import com.register.library.googleBooks.entity.GoogleBook;
 import com.register.library.googleBooks.entity.GoogleBookList;
@@ -7,6 +8,7 @@ import com.register.library.mapper.BookMapper;
 import com.register.library.repository.model.entity.BookEntity;
 import com.register.library.repository.model.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -44,10 +46,11 @@ public class BookService {
     /**
      * Find all books saved by user
      *
-     * @return list of user' books
+     * @param searchCriteriaDto criteria to search defined by user
+     * @return page of user' books
      */
-    public List<BookEntity> findBooksInRegister() {
-        return bookRepository.findAll();
+    public Page<BookEntity> findBooksInRegister(SearchCriteriaDto searchCriteriaDto) {
+        return bookRepository.findBooks(searchCriteriaDto);
     }
 
     /**
