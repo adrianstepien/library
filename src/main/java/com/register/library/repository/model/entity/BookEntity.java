@@ -1,5 +1,6 @@
 package com.register.library.repository.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import javax.persistence.*;
@@ -34,5 +35,6 @@ public class BookEntity {
     @Column(name = "file_id")
     private String fileId;
     @Column(name = "date_of_reading")
+    @JsonFormat(pattern="yyyy-MM-dd")
     private LocalDate dateOfReading;
 }

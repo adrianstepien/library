@@ -169,11 +169,13 @@ class BookServiceTest {
 
 	@Test
 	public void findAllBooksInRegisterByIdNoBookTest() {
-		// given and when
-		BookEntity output = bookService.findBookInRegisterById(FAKE_ID);
-
-		// then
-		Assertions.assertNull(output);
+		try {
+			// given and when
+			bookService.findBookInRegisterById(FAKE_ID);
+		} catch (ResponseStatusException ex) {
+			Assertions.assertEquals(HttpStatus.NOT_FOUND, ex.getStatus());
+			Assertions.assertEquals("No book found", ex.getReason());
+		}
 	}
 
 	@Test
@@ -196,11 +198,13 @@ class BookServiceTest {
 
 	@Test
 	public void bookHasFileNoBookTest() {
-		// given and when
-		boolean output = bookService.hasFile(FAKE_ID);
-
-		// then
-		Assertions.assertFalse(output);
+		try {
+			// given and when
+			bookService.hasFile(FAKE_ID);
+		} catch (ResponseStatusException ex) {
+			Assertions.assertEquals(HttpStatus.NOT_FOUND, ex.getStatus());
+			Assertions.assertEquals("Cannot verify if book has a file. No book found", ex.getReason());
+		}
 	}
 
 	@Test

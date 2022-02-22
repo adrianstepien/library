@@ -13,6 +13,7 @@ import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.File;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,7 @@ import java.util.List;
  * Google drive REST client
  */
 @Service
+@Slf4j
 public class GoogleDriveClient {
 
     private static NetHttpTransport HTTP_TRANSPORT = new NetHttpTransport();
@@ -74,7 +76,7 @@ public class GoogleDriveClient {
     public void saveAuthorizationCode(HttpServletRequest request) throws IOException {
         String code = request.getParameter("code");
         if (code != null) {
-            //TODO: dodac log o braku code w requescie
+            log.info("There is no code in request");
             GoogleTokenResponse response = codeFlow.newTokenRequest(code).setRedirectUri(callbackUri).execute();
             codeFlow.createAndStoreCredential(response, USER_IDENTIFIER_KEY);
         }

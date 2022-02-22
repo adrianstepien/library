@@ -15,7 +15,7 @@ import java.util.List;
  * REST controller for book operations
  */
 @RestController
-@CrossOrigin(origins = "${cors.address}")
+@CrossOrigin(origins = "${cors.address:http://localhost}")
 @RequestMapping(path = "/api/book")
 @RequiredArgsConstructor
 @Slf4j
