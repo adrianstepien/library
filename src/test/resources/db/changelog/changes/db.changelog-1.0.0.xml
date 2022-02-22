@@ -33,6 +33,7 @@
             <column name="published_date" type="varchar(255)"/>
             <column name="title" type="varchar(255))"/>
             <column name="file_id" type="varchar(255)"/>
+            <column name="date_of_reading" type="DATE"/>
         </createTable>
     </changeSet>
 </databaseChangeLog>

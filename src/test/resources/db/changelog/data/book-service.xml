@@ -20,6 +20,7 @@
             <column name="own_review" type="varchar(255)" value="Good book"/>
             <column name="page_count" value="123"/>
             <column name="title" type="varchar(255)" value="The lord of the rings"/>
+            <column name="date_of_reading" type="DATE" value="2020-10-04"/>
         </insert>
         <insert tableName="book">
             <column name="id" value="2"/>
@@ -30,6 +31,7 @@
             <column name="page_count" value="423"/>
             <column name="title" type="varchar(255)" value="The Boy from the Woods"/>
             <column name="file_id" type="varchar(255)" value="sdfiun34mdas32nj"/>
+            <column name="date_of_reading" type="DATE" value="2022-10-04"/>
         </insert>
         <insert tableName="book">
             <column name="id" value="3"/>
@@ -40,6 +42,7 @@
             <column name="page_count" value="423"/>
             <column name="title" type="varchar(255)" value="The Boy from the Woods"/>
             <column name="file_id" type="varchar(255)" value="sdfiun34mdas32nj"/>
+            <column name="date_of_reading" type="DATE" value="2021-11-14"/>
         </insert>
     </changeSet>
 </databaseChangeLog>

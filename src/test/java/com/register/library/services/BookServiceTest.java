@@ -22,6 +22,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @ActiveProfiles("test-db")
@@ -44,6 +45,7 @@ class BookServiceTest {
 	private static final String DESCRIPTION = "Test Description";
 	private static final String IMAGE_LINKS = "Test Image Links";
 	private static final String FILE_ID = "Test File ID";
+	private static final LocalDate DATE_OF_READING = LocalDate.of(2022, 11, 13);
 
 	@Autowired
 	private BookService bookService;
@@ -129,7 +131,7 @@ class BookServiceTest {
 		Assertions.assertEquals(9, (int) output.getOwnRating());
 		Assertions.assertEquals("Good book", output.getOwnReview());
 		Assertions.assertEquals("123", output.getPageCount());
-		Assertions.assertEquals("The lord of the rings", output.getTitle());
+		Assertions.assertEquals(LocalDate.of(2020, 10, 4), output.getDateOfReading());
 	}
 
 	@Test
@@ -148,7 +150,7 @@ class BookServiceTest {
 		Assertions.assertEquals(9, (int) output.getOwnRating());
 		Assertions.assertEquals("Good book", output.getOwnReview());
 		Assertions.assertEquals("123", output.getPageCount());
-		Assertions.assertEquals("The lord of the rings", output.getTitle());
+		Assertions.assertEquals(LocalDate.of(2020, 10, 4), output.getDateOfReading());
 	}
 
 	@Test
@@ -162,7 +164,7 @@ class BookServiceTest {
 		Assertions.assertEquals(9, (int) output.getOwnRating());
 		Assertions.assertEquals("Good book", output.getOwnReview());
 		Assertions.assertEquals("123", output.getPageCount());
-		Assertions.assertEquals("The lord of the rings", output.getTitle());
+		Assertions.assertEquals(LocalDate.of(2020, 10, 4), output.getDateOfReading());
 	}
 
 	@Test
@@ -204,7 +206,8 @@ class BookServiceTest {
 	@Test
 	public void addBookToRegistryTest() {
 		// given
-		BookEntity input = BookEntityHelper.getBookEntity(TITLE, AUTHORS, PUBLISHED_DATE, PAGE_COUNT, DESCRIPTION, IMAGE_LINKS, OWN_REVIEW, OWN_RATING, FILE_ID);
+		BookEntity input = BookEntityHelper.getBookEntity(TITLE, AUTHORS, PUBLISHED_DATE, PAGE_COUNT, DESCRIPTION,
+				IMAGE_LINKS, OWN_REVIEW, OWN_RATING, FILE_ID, DATE_OF_READING);
 
 		// when
 		BookEntity output = bookService.addBookToRegister(input);
@@ -219,12 +222,14 @@ class BookServiceTest {
 		Assertions.assertEquals(OWN_REVIEW, output.getOwnReview());
 		Assertions.assertEquals(OWN_RATING, output.getOwnRating());
 		Assertions.assertEquals(FILE_ID, output.getFileId());
+		Assertions.assertEquals(DATE_OF_READING, output.getDateOfReading());
 	}
 
 	@Test
 	public void updateBookInRegistryTest() {
 		// given
-		BookEntity input = BookEntityHelper.getBookEntity(TITLE, AUTHORS, PUBLISHED_DATE, PAGE_COUNT, DESCRIPTION, IMAGE_LINKS, OWN_REVIEW, OWN_RATING, FILE_ID);
+		BookEntity input = BookEntityHelper.getBookEntity(TITLE, AUTHORS, PUBLISHED_DATE, PAGE_COUNT, DESCRIPTION,
+				IMAGE_LINKS, OWN_REVIEW, OWN_RATING, FILE_ID, DATE_OF_READING);
 		input.setId(BOOK_WITH_FILE_ID);
 
 		// when
@@ -240,12 +245,14 @@ class BookServiceTest {
 		Assertions.assertEquals(OWN_REVIEW, output.getOwnReview());
 		Assertions.assertEquals(OWN_RATING, output.getOwnRating());
 		Assertions.assertEquals(FILE_ID, output.getFileId());
+		Assertions.assertEquals(DATE_OF_READING, output.getDateOfReading());
 	}
 
 	@Test
 	public void updateBookInRegistryNoBookTest() {
 		// given
-		BookEntity input = BookEntityHelper.getBookEntity(TITLE, AUTHORS, PUBLISHED_DATE, PAGE_COUNT, DESCRIPTION, IMAGE_LINKS, OWN_REVIEW, OWN_RATING, FILE_ID);
+		BookEntity input = BookEntityHelper.getBookEntity(TITLE, AUTHORS, PUBLISHED_DATE, PAGE_COUNT, DESCRIPTION,
+				IMAGE_LINKS, OWN_REVIEW, OWN_RATING, FILE_ID, DATE_OF_READING);
 		input.setId(FAKE_ID);
 
 		try {

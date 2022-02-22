@@ -3,6 +3,7 @@ package com.register.library.repository.model.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "book")
@@ -32,4 +33,6 @@ public class BookEntity {
     private Integer ownRating;
     @Column(name = "file_id")
     private String fileId;
+    @Column(name = "date_of_reading")
+    private LocalDate dateOfReading;
 }
