@@ -17,10 +17,9 @@ spring:
     url: ${DATABASE_URL}
   servlet:
     multipart:
-      location: ${TEMP_FILE_LOCATION}
-      max-file-size: ${MAX_FILE_SIZE}
-      max-request-size: ${MAX_REQUEST_SIZE}
-
+      location: ${TEMP_FILE_LOCATION:${java.io.tmpdir}}
+      max-file-size: ${MAX_FILE_SIZE:10MB}
+      max-request-size: ${MAX_REQUEST_SIZE:10MB}
   jpa:
     properties:
       hibernate:
