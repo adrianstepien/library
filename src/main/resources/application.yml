@@ -26,6 +26,9 @@ spring:
       hibernate:
         temp:
           use_jdbc_metadata_defaults: ${JDBC_CLOB:false}
-
+        order_by:
+          default_null_ordering: last
+  liquibase:
+    enabled: false
 cors:
   address: ${CORS_URL}
